@@ -13,11 +13,15 @@ import Folder from "@/components/folder";
 
 export default function Home() {
   const [explorerData, setExplorerData] = useState(data);
+  const [showExplorer, setShowExplorer] = useState(true);
 
   return (
-    <main className="flex gap-0">
+    <main className="flex gap-0 h-screen">
       {/* left side menubar */}
-      <div className="p-5 self-start">
+      <div
+        className="p-5 self-start bg-gray-50 h-full"
+        onClick={() => setShowExplorer(!showExplorer)}
+      >
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
@@ -31,7 +35,11 @@ export default function Home() {
       </div>
 
       {/* folder structure */}
-      <div className="mt-3">
+      <div
+        className={`py-3 transition-all ease-in-out duration-300  ${
+          showExplorer ? "block" : "hidden"
+        }`}
+      >
         <Folder explorerData={explorerData} />
       </div>
     </main>
