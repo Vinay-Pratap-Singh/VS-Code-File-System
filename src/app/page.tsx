@@ -12,7 +12,7 @@ import Folder from "@/components/folder";
 import { useDataContext } from "@/context/dataContext";
 
 export default function Home() {
-  const { state } = useDataContext();
+  const { state, dispatch } = useDataContext();
   const [showExplorer, setShowExplorer] = useState(true);
 
   return (

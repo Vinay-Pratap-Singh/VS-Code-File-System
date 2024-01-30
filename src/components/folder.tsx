@@ -58,7 +58,7 @@ const Folder = ({ explorerData }: IProps) => {
   };
 
   return (
-    <ContextMenu>
+    <ContextMenu key={explorerData?.id}>
       <ContextMenuTrigger>
         <Accordion key={explorerData?.id} type="single" collapsible>
           <AccordionItem value="item-1">
@@ -145,7 +145,13 @@ const Folder = ({ explorerData }: IProps) => {
         </ContextMenuItem>
         <ContextMenuItem
           className="flex items-center gap-2 cursor-pointer"
-          // onClick={() => deleteFolder({ id: explorerData?.id })}
+          onClick={() =>
+            dispatch &&
+            dispatch({
+              type: ACTION_TYPES.DELETE_FOLDER,
+              payload: { id: explorerData?.id },
+            })
+          }
         >
           <Trash size={16} />
           Delete
