@@ -17,7 +17,8 @@ import {
 } from "./ui/context-menu";
 import { Input } from "./ui/input";
 import { useDataContext } from "@/context/dataContext";
-import { ACTION_TYPES } from "@/helper/enum";
+import { ACTION_TYPES, FILE_EXTENSION_ICON_MAP } from "@/helper/enum";
+import Image from "next/image";
 
 interface IProps {
   explorerData: IExplorerData;
@@ -39,6 +40,13 @@ const Folder = ({ explorerData }: IProps) => {
   const [isEditable, setIsEditable] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const contentEditableRef = useRef<HTMLParagraphElement | null>(null);
+
+  // for file icon based on extension
+  const fileExtension: string =
+    explorerData.name.split(".").pop()?.toUpperCase() || "TXT";
+  const selectedSvg = (FILE_EXTENSION_ICON_MAP as Record<string, string>)[
+    fileExtension ? fileExtension : "TXT"
+  ];
 
   // function to handle file / folder creation
   const handleFolderCreation = () => {
@@ -117,7 +125,13 @@ const Folder = ({ explorerData }: IProps) => {
               {explorerData?.isFolder ? (
                 <FolderClosed size={20} />
               ) : (
-                <File size={20} />
+                // <File size={20} />
+                <Image
+                  src={selectedSvg || FILE_EXTENSION_ICON_MAP.TXT}
+                  alt="selectedSvg"
+                  width={20}
+                  height={20}
+                />
               )}
               <p
                 ref={contentEditableRef}
