@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -34,7 +34,11 @@ const Folder = ({ explorerData }: IProps) => {
     isFolder: true,
     showInput: false,
   });
+  // for new file or folder name
   const [text, setText] = useState("");
+  const [isEditable, setIsEditable] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const contentEditableRef = useRef<HTMLParagraphElement | null>(null);
 
   // function to handle file / folder creation
   const handleFolderCreation = () => {
@@ -57,6 +61,53 @@ const Folder = ({ explorerData }: IProps) => {
     setText("");
   };
 
+  // function to handle file rename
+  const handleFileRenaming = ({ text }: { text: string }) => {
+    dispatch &&
+      dispatch({
+        type: ACTION_TYPES.RENAME_FOLDER,
+        payload: {
+          id: explorerData?.id,
+          text,
+        },
+      });
+    setIsEditable(false);
+  };
+
+  // for focusing on input to create new file or folder
+  useEffect(() => {
+    if (createFolder.showInput) {
+      setTimeout(() => {
+        inputRef.current && inputRef.current.focus();
+      }, 200);
+    }
+  }, [createFolder.showInput]);
+
+  // for focusing on editable para to rename
+  useEffect(() => {
+    if (isEditable) {
+      setTimeout(() => {
+        contentEditableRef.current && contentEditableRef.current.focus();
+      }, 200);
+    }
+  }, [isEditable]);
+
+  // for enabling rename on enter button
+  useEffect(() => {
+    function rename(event: KeyboardEvent) {
+      if (event.key === "Enter") {
+        handleFileRenaming({
+          text: contentEditableRef.current?.innerText || "",
+        });
+      }
+    }
+    if (isEditable) {
+      contentEditableRef.current?.addEventListener("keydown", rename);
+    } else {
+      contentEditableRef.current?.removeEventListener("keydown", rename);
+    }
+  }, [isEditable]);
+
   return (
     <ContextMenu key={explorerData?.id}>
       <ContextMenuTrigger>
@@ -68,7 +119,18 @@ const Folder = ({ explorerData }: IProps) => {
               ) : (
                 <File size={20} />
               )}
-              {explorerData?.name}
+              <p
+                ref={contentEditableRef}
+                className={`w-full text-left ${
+                  isEditable ? "px-1 py-[1px]" : ""
+                }`}
+                contentEditable={isEditable}
+                onBlur={(event) => {
+                  handleFileRenaming({ text: event.currentTarget.innerText });
+                }}
+              >
+                {explorerData?.name}
+              </p>
             </AccordionTrigger>
 
             {/* input box for new folder or file creation */}
@@ -79,14 +141,17 @@ const Folder = ({ explorerData }: IProps) => {
                 ) : (
                   <File size={18} />
                 )}
-                <Input
-                  type="text"
-                  autoFocus
-                  className="px-1 py-[1px]"
-                  value={text}
-                  onBlur={handleFolderCreation}
-                  onChange={(event) => setText(event.target.value)}
-                />
+                <form onSubmit={handleFolderCreation}>
+                  <Input
+                    ref={inputRef}
+                    type="text"
+                    autoFocus
+                    className="px-1 py-[1px]"
+                    value={text}
+                    onBlur={handleFolderCreation}
+                    onChange={(event) => setText(event.target.value)}
+                  />
+                </form>
               </div>
             )}
 
@@ -139,7 +204,10 @@ const Folder = ({ explorerData }: IProps) => {
             </ContextMenuItem>
           </>
         )}
-        <ContextMenuItem className="flex items-center gap-2 cursor-pointer">
+        <ContextMenuItem
+          className="flex items-center gap-2 cursor-pointer"
+          onClick={() => setIsEditable(true)}
+        >
           <Edit size={16} />
           Rename
         </ContextMenuItem>
