@@ -8,11 +8,11 @@ import {
 } from "@/components/ui/tooltip";
 import { Files } from "lucide-react";
 import { useState } from "react";
-import { explorerData as data } from "@/data/explorerData";
 import Folder from "@/components/folder";
+import { useDataContext } from "@/context/dataContext";
 
 export default function Home() {
-  const [explorerData, setExplorerData] = useState(data);
+  const { state } = useDataContext();
   const [showExplorer, setShowExplorer] = useState(true);
 
   return (
@@ -40,7 +40,7 @@ export default function Home() {
           showExplorer ? "block" : "hidden"
         }`}
       >
-        <Folder explorerData={explorerData} />
+        <Folder explorerData={state} />
       </div>
     </main>
   );

@@ -7,7 +7,7 @@ export const explorerData: IExplorerData = {
   items: [
     {
       id: "2",
-      name: "Public",
+      name: "public",
       isFolder: true,
       items: [],
     },
