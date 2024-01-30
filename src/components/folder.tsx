@@ -16,6 +16,8 @@ import {
   ContextMenuTrigger,
 } from "./ui/context-menu";
 import { Input } from "./ui/input";
+import { useDataContext } from "@/context/dataContext";
+import { ACTION_TYPES } from "@/helper/enum";
 
 interface IProps {
   explorerData: IExplorerData;
@@ -27,6 +29,7 @@ interface ICreateFolder {
 }
 
 const Folder = ({ explorerData }: IProps) => {
+  const { dispatch } = useDataContext();
   const [createFolder, setCreateFolder] = useState<ICreateFolder>({
     isFolder: true,
     showInput: false,
@@ -35,12 +38,18 @@ const Folder = ({ explorerData }: IProps) => {
 
   // function to handle file / folder creation
   const handleFolderCreation = () => {
-    if (!text) return;
-    // addNewFolder({
-    //   id: explorerData?.id,
-    //   isFolder: createFolder?.isFolder,
-    //   text,
-    // });
+    if (text) {
+      dispatch &&
+        dispatch({
+          type: ACTION_TYPES.CREATE_FOLDER,
+          payload: {
+            text,
+            id: explorerData?.id,
+            isFolder: createFolder.isFolder,
+          },
+        });
+    }
+
     setCreateFolder({
       ...createFolder,
       showInput: false,
