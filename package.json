@@ -2,6 +2,10 @@
   "name": "vs-code-file-system",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "name": "Vinay Pratap Singh (Harvi)",
+    "url": "https:www.harvi.netlify.app"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",

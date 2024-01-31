@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# **VS Code File System**
 
-## Getting Started
+## **Table of content**
 
-First, run the development server:
+- [Overview](#overview)
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+- [Installation](#installation)
+- [Live Link](#live-link)
+- [Video Walkthrough](#video-walkthrough)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## **Overview**
+
+This is a VS code file system working replica where a user will get some pre-defined folder structure to which he / she can modify by performing the several operations like creation, updation and deletion.
+
+## **Tech Stack**
+
+- Next JS
+- Tailwind CSS
+- ShadCN
+- TypeScript
+
+## **Features**
+
+- Creation, updation and deletion of file / folder
+- Handled edge cases like-
+  - Duplicate file / folder
+  - Empty file / folder
+- Extension based file icons
+
+## **Installation**
+
+To set up the VS Code File System locally, follow these steps:
+
+### **Clone the repository**
+
+```js
+git clone https://github.com/Vinay-Pratap-Singh/VS-Code-File-System.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### **Navigate to the project folder**
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```js
+cd vs-code-file-system
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### **Install dependencies**
 
-## Learn More
+```js
+npm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+### **Usage**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Start the development server:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```js
+npm run dev
+```
 
-## Deploy on Vercel
+Open the app in your browser: http://localhost:3000
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## **Live Link**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Explore the project in action and share your feedback
+
+## **Video Walkthrough**
+
+For a detailed visual guide to the project, check out the video explanation: [Watch Video ↗️]()
