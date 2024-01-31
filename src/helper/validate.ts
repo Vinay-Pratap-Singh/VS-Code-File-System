@@ -46,9 +46,16 @@ export const doesFolderExist = ({
       }
     };
 
-    return findParent({
+    const data = findParent({
       parentNode: state,
       id: currentNode.id,
     });
+
+    for (let i = 0; i < data.items.length; i++) {
+      if (data.items[i].name === text && data.items[i].isFolder === isFolder) {
+        return true;
+      }
+    }
+    return false;
   }
 };

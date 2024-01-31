@@ -40,7 +40,7 @@ export default function Home() {
           showExplorer ? "block" : "hidden"
         }`}
       >
-        <Folder explorerData={state} />
+        <Folder explorerData={state} depth={1} />
       </div>
     </main>
   );

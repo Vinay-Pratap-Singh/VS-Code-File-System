@@ -20,9 +20,11 @@ import { useDataContext } from "@/context/dataContext";
 import { ACTION_TYPES, FILE_EXTENSION_ICON_MAP } from "@/helper/enum";
 import Image from "next/image";
 import { doesFolderExist } from "@/helper/validate";
+import { toast } from "sonner";
 
 interface IProps {
   explorerData: IExplorerData;
+  depth: number;
 }
 
 interface ICreateFolder {
@@ -30,7 +32,7 @@ interface ICreateFolder {
   showInput: boolean;
 }
 
-const Folder = ({ explorerData }: IProps) => {
+const Folder = ({ explorerData, depth }: IProps) => {
   const { dispatch, state } = useDataContext();
   const [createFolder, setCreateFolder] = useState<ICreateFolder>({
     isFolder: true,
@@ -70,6 +72,7 @@ const Folder = ({ explorerData }: IProps) => {
 
     if (doesExist) {
       handleInput();
+      toast("Name already exists");
       return;
     }
 
@@ -103,6 +106,7 @@ const Folder = ({ explorerData }: IProps) => {
       if (contentEditableRef.current) {
         contentEditableRef.current.innerText = explorerData.name;
       }
+      toast("Name already exists");
       return;
     }
 
@@ -112,7 +116,6 @@ const Folder = ({ explorerData }: IProps) => {
         payload: {
           id: explorerData?.id,
           text,
-          oldText: explorerData?.name,
         },
       });
     setIsEditable(false);
@@ -161,7 +164,6 @@ const Folder = ({ explorerData }: IProps) => {
               {explorerData?.isFolder ? (
                 <FolderClosed size={20} />
               ) : (
-                // <File size={20} />
                 <Image
                   src={selectedSvg || FILE_EXTENSION_ICON_MAP.TXT}
                   alt="selectedSvg"
@@ -217,7 +219,13 @@ const Folder = ({ explorerData }: IProps) => {
                   </p>
                 ) : (
                   explorerData?.items.map((item) => {
-                    return <Folder key={item?.id} explorerData={item} />;
+                    return (
+                      <Folder
+                        key={item?.id}
+                        explorerData={item}
+                        depth={depth + 1}
+                      />
+                    );
                   })
                 )}
               </AccordionContent>
@@ -254,26 +262,30 @@ const Folder = ({ explorerData }: IProps) => {
             </ContextMenuItem>
           </>
         )}
-        <ContextMenuItem
-          className="flex items-center gap-2 cursor-pointer"
-          onClick={() => setIsEditable(true)}
-        >
-          <Edit size={16} />
-          Rename
-        </ContextMenuItem>
-        <ContextMenuItem
-          className="flex items-center gap-2 cursor-pointer"
-          onClick={() =>
-            dispatch &&
-            dispatch({
-              type: ACTION_TYPES.DELETE_FOLDER,
-              payload: { id: explorerData?.id },
-            })
-          }
-        >
-          <Trash size={16} />
-          Delete
-        </ContextMenuItem>
+        {depth !== 1 && (
+          <>
+            <ContextMenuItem
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={() => setIsEditable(true)}
+            >
+              <Edit size={16} />
+              Rename
+            </ContextMenuItem>
+            <ContextMenuItem
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={() =>
+                dispatch &&
+                dispatch({
+                  type: ACTION_TYPES.DELETE_FOLDER,
+                  payload: { id: explorerData?.id },
+                })
+              }
+            >
+              <Trash size={16} />
+              Delete
+            </ContextMenuItem>
+          </>
+        )}
       </ContextMenuContent>
     </ContextMenu>
   );

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { DataContextProvider } from "@/context/dataContext";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <DataContextProvider>{children}</DataContextProvider>
+        <DataContextProvider>
+          <Toaster />
+          {children}
+        </DataContextProvider>
       </body>
     </html>
   );
