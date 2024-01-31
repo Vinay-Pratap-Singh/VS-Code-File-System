@@ -19,6 +19,7 @@ import { Input } from "./ui/input";
 import { useDataContext } from "@/context/dataContext";
 import { ACTION_TYPES, FILE_EXTENSION_ICON_MAP } from "@/helper/enum";
 import Image from "next/image";
+import { doesFolderExist } from "@/helper/validate";
 
 interface IProps {
   explorerData: IExplorerData;
@@ -30,7 +31,7 @@ interface ICreateFolder {
 }
 
 const Folder = ({ explorerData }: IProps) => {
-  const { dispatch } = useDataContext();
+  const { dispatch, state } = useDataContext();
   const [createFolder, setCreateFolder] = useState<ICreateFolder>({
     isFolder: true,
     showInput: false,
@@ -48,8 +49,30 @@ const Folder = ({ explorerData }: IProps) => {
     fileExtension ? fileExtension : "TXT"
   ];
 
+  // function to handle show and hide of input and mangaing its data
+  const handleInput = () => {
+    setCreateFolder({
+      ...createFolder,
+      showInput: false,
+    });
+    setText("");
+  };
+
   // function to handle file / folder creation
   const handleFolderCreation = () => {
+    const doesExist = doesFolderExist({
+      state,
+      actionType: ACTION_TYPES.CREATE_FOLDER,
+      currentNode: explorerData,
+      text,
+      isFolder: createFolder?.isFolder,
+    });
+
+    if (doesExist) {
+      handleInput();
+      return;
+    }
+
     if (text) {
       dispatch &&
         dispatch({
@@ -62,21 +85,34 @@ const Folder = ({ explorerData }: IProps) => {
         });
     }
 
-    setCreateFolder({
-      ...createFolder,
-      showInput: false,
-    });
-    setText("");
+    handleInput();
   };
 
   // function to handle file rename
-  const handleFileRenaming = ({ text }: { text: string }) => {
+  const handleFolderRenaming = ({ text }: { text: string }) => {
+    const doesExist = doesFolderExist({
+      state,
+      actionType: ACTION_TYPES.RENAME_FOLDER,
+      currentNode: explorerData,
+      text,
+      isFolder: createFolder?.isFolder,
+    });
+
+    if (doesExist) {
+      setIsEditable(false);
+      if (contentEditableRef.current) {
+        contentEditableRef.current.innerText = explorerData.name;
+      }
+      return;
+    }
+
     dispatch &&
       dispatch({
         type: ACTION_TYPES.RENAME_FOLDER,
         payload: {
           id: explorerData?.id,
           text,
+          oldText: explorerData?.name,
         },
       });
     setIsEditable(false);
@@ -104,7 +140,7 @@ const Folder = ({ explorerData }: IProps) => {
   useEffect(() => {
     function rename(event: KeyboardEvent) {
       if (event.key === "Enter") {
-        handleFileRenaming({
+        handleFolderRenaming({
           text: contentEditableRef.current?.innerText || "",
         });
       }
@@ -140,7 +176,7 @@ const Folder = ({ explorerData }: IProps) => {
                 }`}
                 contentEditable={isEditable}
                 onBlur={(event) => {
-                  handleFileRenaming({ text: event.currentTarget.innerText });
+                  handleFolderRenaming({ text: event.currentTarget.innerText });
                 }}
               >
                 {explorerData?.name}

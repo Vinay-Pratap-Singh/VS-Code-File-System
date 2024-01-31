@@ -2,6 +2,7 @@ import { ACTION_TYPES } from "@/helper/enum";
 import { IExplorerData, IReducerAction } from "@/helper/interface";
 import { v4 as uuidv4 } from "uuid";
 
+// state reducer with its actions
 export const reducers = (state: IExplorerData, action: IReducerAction) => {
   const { payload, type } = action;
 
@@ -73,10 +74,7 @@ export const reducers = (state: IExplorerData, action: IReducerAction) => {
       const findAndRename = ({ node }: { node: IExplorerData }): any => {
         // if node found
         if (node.id === payload.id) {
-          return {
-            ...node,
-            name: payload?.text,
-          };
+          return { ...node, name: payload.text };
         }
 
         //   recursively finding the node to rename
