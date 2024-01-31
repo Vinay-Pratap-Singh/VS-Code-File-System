@@ -22,6 +22,7 @@ This is a VS code file system working replica where a user will get some pre-def
 
 ## **Features**
 
+- Nested structure
 - Creation, updation and deletion of file / folder
 - Handled edge cases like-
   - Duplicate file / folder
@@ -62,8 +63,8 @@ Open the app in your browser: http://localhost:3000
 
 ## **Live Link**
 
-Explore the project in action and share your feedback
+Explore the project in action and share your feedback [Live Link](https://vs-code-file-system.vercel.app/)
 
 ## **Video Walkthrough**
 
-For a detailed visual guide to the project, check out the video explanation: [Watch Video ↗️]()
+For a detailed visual guide to the project, check out the video explanation: [Watch Video ↗️](https://www.linkedin.com/posts/vinay-pratap-singh-harvi-4b265a212_nextjs-nextjs14-reactjs-activity-7158434529102196736-JuJN?utm_source=share&utm_medium=member_desktop)
